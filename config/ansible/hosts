@@ -1,0 +1,2 @@
+[phpweb]
+192.168.15.29 ansible_user=vagrant ansible_ssh_private_key_file="/vagrant/ssh_key_auth"

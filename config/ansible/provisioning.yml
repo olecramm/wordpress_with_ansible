@@ -1,0 +1,39 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Remove old PHP7 ppa repository
+      apt_repository: repo='ppa:ondrej/php-7.0' state=absent
+
+    - name: Add PHP7 ppa repository
+      apt_repository: repo='ppa:ondrej/php'
+
+    - name: Install packages
+      apt:
+        state: latest
+        update_cache: yes
+        name:
+        - php7.0-cli
+        - php7.0-fpm
+        - apache2
+        - libapache2-mod-php
+        - php7.0-gd
+        - php7.0-ssh2
+        - php7.0-mcrypt
+        - php7.0-mysql
+        - mysql-server
+        - mysql-client
+        - python-mysqldb
+
+    - name: 'Cria o banco do MySQL'
+      mysql_db: 
+        name: wordpress_db
+        login_user: root
+        state: present
+    - name: 'Cria o usuário do MySQL'
+      mysql_user:
+        login_user: root
+        name: wordpress_user
+        password: 12345
+        priv: 'wordpress_db.*:ALL'
+        state: present

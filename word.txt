@@ -1,0 +1,28 @@
+hello world
+
+ansible-playbook /vagrant/config/ansible/provisioning.yml -u vagrant -i /vagrant/config/ansible/hosts --private-key /vagrant/ssh_key_auth
+
+
+---
+- hosts: all
+  tasks:
+    - name: Remove old PHP7 ppa repository
+      apt_repository: repo='ppa:ondrej/php-7.0' state=absent
+
+    - name: Add PHP7 ppa repository
+      apt_repository: repo='ppa:ondrej/php'
+
+    - name: Install packages
+      apt: pkg={{ item }} state=latest update_cache=yes
+      with_items:
+      - php7.0-cli
+      - php7.0-fpm
+      - apache2
+      - libapache2-mod-php
+      - php7.0-gd
+      - php7.0-ssh2
+      - php7.0-mcrypt
+      - php7.0-mysql
+  become: yes
+
+  ansible-playbook /vagrant/config/ansible/provisioning.yml -i /vagrant/config/ansible/hosts
